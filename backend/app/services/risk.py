@@ -2,23 +2,13 @@
 
 from app.services.demo_data import WATER_BODIES
 
-
 def assess_demo_vulnerability(location_id: str) -> dict:
     water_body = next(row for row in WATER_BODIES if row["id"] == location_id)
     change = water_body["water_extent_change_pct"] or 0.0
-
-    # This is only a toy demonstration of score plumbing, not a scientific index.
+    # Toy demonstration of score plumbing, not a scientific index.
     quantity_score = min(100.0, max(0.0, 50.0 + abs(min(change, 0.0)) * 2.0))
-    quality_score = 0.0  # No laboratory/field measurements are present.
-    overall = quantity_score  # Quality is unassessed, not assumed safe.
-
-    if overall >= 75:
-        level = "high"
-    elif overall >= 50:
-        level = "moderate"
-    else:
-        level = "low"
-
+    overall = quantity_score
+    level = "high" if overall >= 75 else "moderate" if overall >= 50 else "low"
     return {
         "location_id": location_id,
         "quantity_score": round(quantity_score, 1),
