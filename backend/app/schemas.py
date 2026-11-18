@@ -1,9 +1,7 @@
 from typing import Literal
 from pydantic import BaseModel, Field
 
-
 RiskLevel = Literal["low", "moderate", "high", "critical"]
-
 
 class WaterBody(BaseModel):
     id: str
@@ -18,11 +16,10 @@ class WaterBody(BaseModel):
     quality_status: str = "not_assessed"
     notes: str
 
-
 class VulnerabilityAssessment(BaseModel):
     location_id: str
     quantity_score: float = Field(ge=0, le=100)
-    quality_concern_score: float = Field(ge=0, le=100)
+    quality_concern_score: float | None = Field(default=None, ge=0, le=100)
     overall_score: float = Field(ge=0, le=100)
     risk_level: RiskLevel
     confidence: Literal["low", "medium", "high"]
